@@ -1,146 +1,114 @@
 
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export default function BookingForm() {
-  // 1. Manejamos todo el estado del formulario en un solo objeto
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    number: '',
-    fecha: '',
-    time: '',
-    invitados: '',
-    comentario: ''
-  });
+  // Estados para capturar los datos del formulario
+  const [nombre, setNombre] = useState('');
+  const [fecha, setFecha] = useState('');
+  const [hora, setHora] = useState('');
+  const [personas, setPersonas] = useState('');
 
-  // 2. Función que reemplaza tu btnreserva.click
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Evita que la página se recargue
+  const manejarReserva = (e) => {
+    e.preventDefault();
 
-    // Desestructuramos para validar más fácil de forma limpia
-    const { name, email, number, fecha, time, invitados, comentario } = formData;
+    // NOTA: Para la demostración pon tu propio número con código de país (ejemplo Colombia: 57)
+    // Cuando el cliente te compre, cambias este número por el de su restaurante.
+    const telefonoRestaurante = "573217294845"; 
 
-    // Validación exacta: ejecutamos trim() para asegurarnos que no metan solo espacios en blanco
-    if (
-      name.trim() === "" || 
-      email.trim() === "" || 
-      number.trim() === "" || 
-      fecha.trim() === "" || 
-      time.trim() === "" || 
-      invitados.trim() === "" || 
-      comentario.trim() === ""
-    ) {
-      alert("completa el formulario");
-      return; // Detiene la ejecución si falta algo
-    }
+    // Formateamos el texto con negritas de WhatsApp (*) y saltos de línea (%0A)
+    const mensaje = `¡Hola! Me gustaría realizar una reserva:%0A%0A` +
+                    `*Nombre:* ${nombre}%0A` +
+                    `*Fecha:* ${fecha}%0A` +
+                    `*Hora:* ${hora}%0A` +
+                    `*Personas:* ${personas} invitados`;
 
-    // Guardado en LocalStorage idéntico al tuyo
-    localStorage.setItem('name', name);
-    localStorage.setItem('email', email);
-    localStorage.setItem('number', number);
-    localStorage.setItem('fecha', fecha);
-    localStorage.setItem('time', time);
-    localStorage.setItem('invitados', invitados);
-    localStorage.setItem('comentario', comentario);
+    // Generamos el enlace oficial de la API de WhatsApp
+    const urlWhatsApp = `https://wa.me/${telefonoRestaurante}?text=${mensaje}`;
 
-    // Tu alerta original con las variables de React
-    alert(
-      "te has registado exitosamente " + name + 
-      " la hora y fecha de su reserva es " + time + " " + fecha + 
-      " dele aceptar y se le enviara un correo de comfirmacion a su correo registrado " + email
-    );
+    // Abre la pestaña y redirige directamente a la app de WhatsApp
+    window.open(urlWhatsApp, '_blank');
   };
 
   return (
-    <section 
-      id="reservas" 
-      className="bg-gradient-to-br from-[#f8f9fa] to-white rounded-[30px] p-6 md:p-10 min-h-[110vh] w-[90%] mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-4 py-[30px] mt-12"
-    >
-      {/* Sección Datos */}
-      <div className="flex flex-col gap-1.5 items-center w-full lg:w-1/2">
-        <h2 className="text-2xl font-bold text-gray-800">Hacer una reserva</h2>
-        <hr className="w-[100px] border-2 border-gray-400 mb-4" />
-        
-        {/* Atamos el formulario al handleSubmit */}
-        <form onSubmit={handleSubmit} className="flex flex-col gap-5 items-center w-full">
-          <div className="flex gap-5 justify-center w-full">
-            <input 
-              type="text" 
-              placeholder="nombre completo" 
-              value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              className="p-[13px] w-[160px] md:w-[200px] rounded-[10px] border border-gray-400 text-gray-800 focus:outline-none focus:border-[#e74c3c]" 
-            />
-            <input 
-              type="email" 
-              placeholder="correro" 
-              value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
-              className="p-[13px] w-[160px] md:w-[200px] rounded-[10px] border border-gray-400 text-gray-800 focus:outline-none focus:border-[#e74c3c]" 
-            />
-          </div>
-          
-          <div className="flex gap-5 justify-center w-full">
-            <input 
-              type="number" 
-              placeholder="telefono" 
-              value={formData.number}
-              onChange={(e) => setFormData({...formData, number: e.target.value})}
-              className="p-[13px] w-[160px] md:w-[200px] rounded-[10px] border border-gray-400 text-gray-800 focus:outline-none focus:border-[#e74c3c]" 
-            />
-            <input 
-              type="date" 
-              value={formData.fecha}
-              onChange={(e) => setFormData({...formData, fecha: e.target.value})}
-              className="p-[13px] w-[160px] md:w-[200px] rounded-[10px] border border-gray-400 text-gray-600 focus:outline-none focus:border-[#e74c3c]" 
-            />
-          </div>
-          
-          <div className="flex gap-5 justify-center w-full">
-            <input 
-              type="time" 
-              value={formData.time}
-              onChange={(e) => setFormData({...formData, time: e.target.value})}
-              className="p-[13px] w-[160px] md:w-[200px] rounded-[10px] border border-gray-400 text-gray-600 focus:outline-none focus:border-[#e74c3c]" 
-            />
-            <input 
-              type="text" 
-              placeholder="invitados" 
-              value={formData.invitados}
-              onChange={(e) => setFormData({...formData, invitados: e.target.value})}
-              className="p-[13px] w-[160px] md:w-[200px] rounded-[10px] border border-gray-400 text-gray-800 focus:outline-none focus:border-[#e74c3c]" 
-            />
-          </div>
-          
-          <div className="flex justify-center w-full">
-            <input 
-              id="comentario" 
-              type="text" 
-              placeholder="comentarios" 
-              value={formData.comentario}
-              onChange={(e) => setFormData({...formData, comentario: e.target.value})}
-              className="p-[13px] h-[150px] w-[340px] md:w-[420px] rounded-[10px] border border-gray-400 text-gray-800 focus:outline-none focus:border-[#e74c3c]" 
-            />
-          </div>
-          
-          <button 
-            type="submit" 
-            className="bg-[#e74c3c] text-white p-[15px] rounded-[10px] w-[200px] text-xl font-medium border-none hover:bg-[#d43f2e] transition-colors self-center lg:self-auto cursor-pointer"
-          >
-            mesa de reserva
-          </button>
-        </form>
+    <div className="w-full max-w-xl mx-auto p-8 bg-[#f8f9fa] rounded-[30px] border border-gray-100 shadow-sm mt-12">
+      <div className="text-center mb-8">
+        <h3 className="text-2xl font-black text-gray-900 tracking-tight">Reserva tu Mesa</h3>
+        <p className="text-gray-500 text-sm mt-1">Completa los datos y confirma al instante por WhatsApp</p>
       </div>
 
-      {/* Imagen Lateral */}
-      <div className="w-full lg:w-1/2 flex justify-center">
-        <img 
-          src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=800&h=600&fit=crop&crop=center" 
-          alt="Bistro Interior" 
-          className="max-w-full h-[45vh] lg:h-[95vh] rounded-[20px] object-cover"
-        />
-      </div>
-    </section>
+      <form onSubmit={manejarReserva} className="space-y-5">
+        {/* Campo Nombre */}
+        <div>
+          <label className="block text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-2">
+            Nombre Completo
+          </label>
+          <input 
+            type="text" 
+            required 
+            placeholder="Ej. Omar de Jesús"
+            value={nombre} 
+            onChange={(e) => setNombre(e.target.value)}
+            className="w-full p-3.5 bg-white rounded-xl border border-gray-200 text-gray-900 font-medium placeholder-gray-400 focus:outline-none focus:border-[#e74c3c] focus:ring-1 focus:ring-[#e74c3c] transition-colors" 
+          />
+        </div>
+
+        {/* Fila de Fecha y Hora */}
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-2">
+              Fecha
+            </label>
+            <input 
+              type="date" 
+              required 
+              value={fecha} 
+              onChange={(e) => setFecha(e.target.value)}
+              className="w-full p-3.5 bg-white rounded-xl border border-gray-200 text-gray-900 font-medium focus:outline-none focus:border-[#e74c3c] focus:ring-1 focus:ring-[#e74c3c] transition-colors" 
+            />
+          </div>
+          <div>
+            <label className="block text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-2">
+              Hora
+            </label>
+            <input 
+              type="time" 
+              required 
+              value={hora} 
+              onChange={(e) => setHora(e.target.value)}
+              className="w-full p-3.5 bg-white rounded-xl border border-gray-200 text-gray-900 font-medium focus:outline-none focus:border-[#e74c3c] focus:ring-1 focus:ring-[#e74c3c] transition-colors" 
+            />
+          </div>
+        </div>
+
+        {/* Campo Número de Personas */}
+        <div>
+          <label className="block text-xs font-extrabold text-gray-700 uppercase tracking-wider mb-2">
+            Número de Invitados
+          </label>
+          <input 
+            type="number" 
+            required 
+            min="1" 
+            max="20"
+            placeholder="¿Cuántas personas asisten?"
+            value={personas} 
+            onChange={(e) => setPersonas(e.target.value)}
+            className="w-full p-3.5 bg-white rounded-xl border border-gray-200 text-gray-900 font-medium placeholder-gray-400 focus:outline-none focus:border-[#e74c3c] focus:ring-1 focus:ring-[#e74c3c] transition-colors" 
+          />
+        </div>
+
+        {/* Botón de Envío */}
+        <button 
+          type="submit" 
+          className="w-full h-14 mt-4 bg-[#e74c3c] text-white rounded-full font-bold shadow-lg shadow-red-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 text-base"
+        >
+          <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.713-1.455L0 24zm6.59-4.846c1.66.986 3.298 1.448 4.757 1.451 5.405.002 9.801-4.394 9.804-9.801.002-2.618-1.012-5.08-2.859-6.93C16.447 1.975 13.985.952 11.373.951 5.964.951 1.568 5.348 1.566 10.757c-.001 1.52.404 3.003 1.173 4.317l-1.013 3.696 3.784-.992z"/>
+          </svg>
+          Solicitar Reserva por WhatsApp
+        </button>
+      </form>
+    </div>
   );
 }
