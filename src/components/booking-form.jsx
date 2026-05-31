@@ -14,7 +14,7 @@ export default function BookingForm() {
     e.preventDefault();
 
     // Coloca tu número de teléfono real para la prueba con el cliente
-    const telefonoRestaurante = "573001234567"; 
+    const telefonoRestaurante = "573217294845"; 
 
     const mensaje = `¡Hola! Me gustaría realizar una reserva:%0A%0A` +
                     `*Nombre:* ${nombre}%0A` +
